@@ -23,10 +23,11 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: url('our-pic.jpg') no-repeat center center fixed;
+            background: url('our-pic-2.jpg') no-repeat center center fixed;
             background-size: cover;
             opacity: 0.3;
             z-index: -1;
+            transition: background 1s ease-in-out;
         }
 
         .container {
@@ -70,7 +71,7 @@
 <body>
 
     <!-- Background Image (Always Visible) -->
-    <div class="background"></div>
+    <div class="background" id="background"></div>
 
     <!-- Page 1: Promise -->
     <div id="page1" class="container">
@@ -96,6 +97,8 @@
     <audio id="bgMusic" src="song.mp3" loop></audio>
 
     <script>
+        const background = document.getElementById("background");
+
         document.getElementById("promiseBtn").addEventListener("click", function() {
             document.getElementById("page1").classList.add("hidden");
             document.getElementById("page2").classList.remove("hidden");
@@ -146,9 +149,11 @@
             });
         });
 
-        // Final Page: YES Button Actions (Background Stays)
+        // Final Page: YES Button Actions (Change Background to our-pic.jpg)
         document.getElementById("yesBtn").addEventListener("click", function() {
             alert("Yay! Let's have an amazing prom night! 🎉💖");
+            background.style.background = "url('our-pic.jpg') no-repeat center center fixed";
+            background.style.backgroundSize = "cover";
         });
 
         // Final Page: NO Button Actions (Increase YES Button Size)
