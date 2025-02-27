@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Cute Quiz</title>
     <style>
-        /* General Styles */
+        /* General Page Styling */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -17,17 +17,18 @@
 
         /* Background Image */
         .background {
+            background: url('our-pic-2.jpg') no-repeat center center fixed;
+            background-size: cover;
+            opacity: 0.3;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0.3;
             z-index: -1;
         }
 
+        /* Containers */
         .container {
             margin-top: 50px;
         }
@@ -36,6 +37,7 @@
             display: none;
         }
 
+        /* Buttons */
         button {
             background-color: #ff69b4;
             color: white;
@@ -51,10 +53,11 @@
             background-color: #ff1493;
         }
 
+        /* Quiz Styling */
         .quiz-container {
             text-align: left;
             display: inline-block;
-            background: rgba(255, 255, 255, 0.8); /* White box with transparency */
+            background: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 10px;
         }
@@ -63,18 +66,37 @@
             transition: font-size 0.2s ease;
         }
 
-        #countdown {
-            font-size: 20px;
+        /* Final Page Styling */
+        #finalPage {
+            display: none;
+        }
+
+        #countdownTimer {
+            font-size: 24px;
             font-weight: bold;
-            margin-top: 20px;
             color: #ff1493;
+            margin-top: 20px;
+        }
+
+        #loveText {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+
+        #catGif {
+            margin-top: 20px;
+            width: 200px;
+            display: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- Background Image (Changes Dynamically) -->
-    <div id="bgImage" class="background"></div>
+    <!-- Background -->
+    <div class="background"></div>
 
     <!-- Page 1: Promise -->
     <div id="page1" class="container">
@@ -96,21 +118,18 @@
         <button id="noBtn">No</button>
     </div>
 
-    <!-- Page 4: Final Page with Countdown -->
-    <div id="page4" class="container hidden">
-        <h2>Counting down to our special moment! 🎉💖</h2>
-        <p id="countdown"></p>
+    <!-- Final Page -->
+    <div id="finalPage" class="container">
+        <h2>Yay! Let's have an amazing prom night! 🎉💖</h2>
+        <p id="countdownTimer"></p>
+        <p id="loveText">I love you <3</p>
+        <img id="catGif" src="cat-heart.gif" alt="Cute Cat GIF">
     </div>
 
     <!-- Background Music -->
     <audio id="bgMusic" src="song.mp3" loop></audio>
 
     <script>
-        const bgImage = document.getElementById("bgImage");
-
-        // Initial Background for First Two Pages
-        bgImage.style.backgroundImage = "url('our-pic-2.jpg')";
-
         document.getElementById("promiseBtn").addEventListener("click", function() {
             document.getElementById("page1").classList.add("hidden");
             document.getElementById("page2").classList.remove("hidden");
@@ -153,7 +172,6 @@
             }
         });
 
-        // Enable "Next" Button only when all questions are answered
         document.querySelectorAll('input[type="radio"]').forEach(input => {
             input.addEventListener("change", function() {
                 let allAnswered = questions.every((q, i) => document.querySelector(`input[name="q${i}"]:checked`));
@@ -161,33 +179,12 @@
             });
         });
 
-        // Final Page: YES Button Actions (Background Changes)
+        // Final Page: YES Button Actions
         document.getElementById("yesBtn").addEventListener("click", function() {
             document.getElementById("page3").classList.add("hidden");
-            document.getElementById("page4").classList.remove("hidden");
-
-            // Change Background to cat-heart.gif
-            bgImage.style.backgroundImage = "url('cat-heart.gif')";
-
-            // Set Countdown Date (Feb 28, 2025, 2 PM)
-            let eventDate = new Date("Feb 28, 2025 14:00:00").getTime();
-            let countdownElement = document.getElementById("countdown");
-
-            let timer = setInterval(function() {
-                let now = new Date().getTime();
-                let distance = eventDate - now;
-
-                if (distance <= 0) {
-                    clearInterval(timer);
-                    countdownElement.innerHTML = "It's Prom Time! 🎉";
-                } else {
-                    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                    countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-                }
-            }, 1000);
+            document.getElementById("finalPage").classList.remove("hidden");
+            document.getElementById("catGif").style.display = "block";
+            startCountdown();
         });
 
         // NO Button: Increase YES Button Size
@@ -196,6 +193,26 @@
             let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
             yesBtn.style.fontSize = (currentSize + 5) + "px";
         });
+
+        // Countdown Timer Function
+        function startCountdown() {
+            const targetDate = new Date("February 28, 2025 14:00:00").getTime();
+            const timer = document.getElementById("countdownTimer");
+
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance <= 0) {
+                    timer.innerHTML = "It's time! 💃🕺";
+                } else {
+                    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    timer.innerHTML = `Time left: ${days}d ${hours}h ${minutes}m`;
+                }
+            }, 1000);
+        }
     </script>
 
 </body>
