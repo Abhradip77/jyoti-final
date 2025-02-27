@@ -1,54 +1,50 @@
-document.getElementById("promiseBtn").addEventListener("click", function() {
-    document.getElementById("page1").classList.add("hidden");
-    document.getElementById("page2").classList.remove("hidden");
-    document.getElementById("bgMusic").play();
-    startQuiz();
-});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise Me</title>
+    <style>
+        body {
+            background: url('our-pic-2.jpg') center/cover no-repeat;
+            opacity: 0.9;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            color: #ff69b4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: rgba(255, 192, 203, 0.5);
+            padding: 30px;
+            border-radius: 15px;
+        }
+        button {
+            background: #ff69b4;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 10px;
+            color: white;
+        }
+        button:hover {
+            background: #ff1493;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>This will be fun but promise me to stay grounded</h1>
+        <button onclick="startQuiz()">Promise</button>
+    </div>
 
-const questions = [
-    { question: "When did we go official?", options: ["19 sep(c)", "18 sep", "15 sep", "16 sep"], answer: "19 sep(c)" },
-    { question: "Our fav spot?", options: ["si nonnas", "dailys", "high garden", "pop tates(c)"], answer: "pop tates(c)" },
-    { question: "My birth sign?", options: ["capricon", "sagittarius", "scorpio(c)", "cancer"], answer: "scorpio(c)" },
-    { question: "My favourite team?", options: ["united", "real madrid(c)", "atletico madrid", "atletic club"], answer: "real madrid(c)" },
-    { question: "My fav top of yours?", options: ["black kissi one", "pink one", "yellow flower top", "white and pink kurta top(c)"], answer: "white and pink kurta top(c)" }
-];
-
-let currentQuestionIndex = 0;
-
-function startQuiz() {
-    showQuestion();
-}
-
-function showQuestion() {
-    if (currentQuestionIndex < questions.length) {
-        const questionObj = questions[currentQuestionIndex];
-        document.getElementById("questionText").innerText = questionObj.question;
-        let optionsHTML = "";
-        questionObj.options.forEach(option => {
-            optionsHTML += `<button class='optionBtn'>${option}</button>`;
-        });
-        document.getElementById("options").innerHTML = optionsHTML;
-
-        document.querySelectorAll(".optionBtn").forEach(button => {
-            button.addEventListener("click", function() {
-                if (this.innerText === questionObj.answer) {
-                    currentQuestionIndex++;
-                    showQuestion();
-                }
-            });
-        });
-    } else {
-        document.getElementById("page2").classList.add("hidden");
-        document.getElementById("page3").classList.remove("hidden");
-    }
-}
-
-document.getElementById("noBtn").addEventListener("click", function() {
-    let yesBtn = document.getElementById("yesBtn");
-    let currentSize = parseFloat(window.getComputedStyle(yesBtn).getPropertyValue("font-size"));
-    yesBtn.style.fontSize = (currentSize + 5) + "px";
-});
-
-document.getElementById("yesBtn").addEventListener("click", function() {
-    document.body.classList.add("rainbow");
-});
+    <script>
+        function startQuiz() {
+            window.location.href = "quiz.html";
+        }
+    </script>
+</body>
+</html>
