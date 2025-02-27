@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Cute Quiz</title>
+    <title>Will You Be My Prom? 💖</title>
     <style>
-        /* General styling */
+        /* Global Styles */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -13,27 +13,23 @@
             margin: 0;
             padding: 0;
             position: relative;
-            overflow: hidden;
         }
 
-        /* Background image that updates */
+        /* Background Image */
         .background {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: url('our-pic-2.jpg') no-repeat center center fixed;
+            width: 100%;
+            height: 100%;
             background-size: cover;
+            background-position: center;
             opacity: 0.3;
             z-index: -1;
-            transition: background 0.5s ease-in-out;
         }
 
         .container {
             margin-top: 50px;
-            position: relative;
-            z-index: 2;
         }
 
         .hidden {
@@ -58,7 +54,7 @@
         .quiz-container {
             text-align: left;
             display: inline-block;
-            background: rgba(255, 255, 255, 0.8); /* White box with transparency */
+            background: rgba(255, 255, 255, 0.8); /* Transparent White */
             padding: 20px;
             border-radius: 10px;
         }
@@ -66,12 +62,19 @@
         #yesBtn {
             transition: font-size 0.2s ease;
         }
+
+        /* Timer */
+        #countdown {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff1493;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Background Image (Always Visible) -->
-    <div class="background" id="background"></div>
+    <!-- Background Image -->
+    <div id="bgImage" class="background"></div>
 
     <!-- Page 1: Promise -->
     <div id="page1" class="container">
@@ -88,26 +91,31 @@
 
     <!-- Page 3: Final Question -->
     <div id="page3" class="container hidden">
-        <h2>Will you be my prom?</h2>
+        <h2>Will you be my prom? 💖</h2>
         <button id="yesBtn">Yes</button>
         <button id="noBtn">No</button>
+    </div>
+
+    <!-- Page 4: Celebration + Timer -->
+    <div id="page4" class="container hidden">
+        <h2>Yay! Let's have an amazing prom night! 🎉💖</h2>
+        <h3>Countdown to our special moment:</h3>
+        <p id="countdown"></p>
     </div>
 
     <!-- Background Music -->
     <audio id="bgMusic" src="song.mp3" loop></audio>
 
     <script>
-        const background = document.getElementById("background");
+        // Set Initial Background
+        let bgImage = document.getElementById("bgImage");
+        bgImage.style.backgroundImage = "url('our-pic-2.jpg')";
 
+        // Page 1: Click "Promise" to Start
         document.getElementById("promiseBtn").addEventListener("click", function() {
             document.getElementById("page1").classList.add("hidden");
             document.getElementById("page2").classList.remove("hidden");
             document.getElementById("bgMusic").play();
-
-            // Ensure the background remains 'our-pic-2.jpg' at 30% opacity
-            background.style.background = "url('our-pic-2.jpg') no-repeat center center fixed";
-            background.style.backgroundSize = "cover";
-            background.style.opacity = "0.3";
         });
 
         // Quiz Questions
@@ -121,7 +129,7 @@
 
         const quizContainer = document.getElementById("quizContainer");
 
-        // Display Questions
+        // Display Quiz Questions
         questions.forEach((q, index) => {
             let div = document.createElement("div");
             div.innerHTML = `<p>${q.question}</p>` +
@@ -129,6 +137,7 @@
             quizContainer.appendChild(div);
         });
 
+        // Check Answers and Proceed
         document.getElementById("nextBtn").addEventListener("click", function() {
             let correct = true;
             questions.forEach((q, index) => {
@@ -141,11 +150,6 @@
             if (correct) {
                 document.getElementById("page2").classList.add("hidden");
                 document.getElementById("page3").classList.remove("hidden");
-
-                // Background remains same as 'our-pic-2.jpg'
-                background.style.background = "url('our-pic-2.jpg') no-repeat center center fixed";
-                background.style.backgroundSize = "cover";
-                background.style.opacity = "0.3";
             } else {
                 alert("Wrong answers! Try again.");
             }
@@ -159,21 +163,39 @@
             });
         });
 
-        // Final Page: YES Button Actions (Change Background to cat-heart.gif)
+        // YES Button Click
         document.getElementById("yesBtn").addEventListener("click", function() {
-            alert("Yay! Let's have an amazing prom night! 🎉💖");
+            document.getElementById("page3").classList.add("hidden");
+            document.getElementById("page4").classList.remove("hidden");
 
-            // Change the background to 'cat-heart.gif' at 30% opacity
-            background.style.background = "url('cat-heart.gif') no-repeat center center fixed";
-            background.style.backgroundSize = "cover";
-            background.style.opacity = "0.3";
+            // Change Background to cat-heart.gif
+            bgImage.style.backgroundImage = "url('cat-heart.gif')";
+
+            // Start Countdown to February 28, 2 PM
+            let eventDate = new Date("Feb 28, 2025 14:00:00").getTime();
+            let countdownElement = document.getElementById("countdown");
+
+            let timer = setInterval(function() {
+                let now = new Date().getTime();
+                let distance = eventDate - now;
+
+                if (distance < 0) {
+                    clearInterval(timer);
+                    countdownElement.innerHTML = "It's Prom Time! 🎉";
+                } else {
+                    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                }
+            }, 1000);
         });
 
-        // Final Page: NO Button Actions (Increase YES Button Size)
+        // NO Button Click (Increase YES Button Size)
         document.getElementById("noBtn").addEventListener("click", function() {
             let yesBtn = document.getElementById("yesBtn");
-            let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-            yesBtn.style.fontSize = (currentSize + 5) + "px";
+            yesBtn.style.fontSize = (parseFloat(window.getComputedStyle(yesBtn).fontSize) + 5) + "px";
         });
     </script>
 
