@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Cute Quiz</title>
     <style>
-        /* Background for all pages */
+        /* General styling */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -16,7 +16,7 @@
             overflow: hidden;
         }
 
-        /* Background image (controlled via JS) */
+        /* Background image that updates */
         .background {
             position: fixed;
             top: 0;
@@ -27,7 +27,7 @@
             background-size: cover;
             opacity: 0.3;
             z-index: -1;
-            transition: background 1s ease-in-out;
+            transition: background 0.5s ease-in-out;
         }
 
         .container {
@@ -103,6 +103,11 @@
             document.getElementById("page1").classList.add("hidden");
             document.getElementById("page2").classList.remove("hidden");
             document.getElementById("bgMusic").play();
+
+            // Ensure the background remains 'our-pic-2.jpg' at 30% opacity
+            background.style.background = "url('our-pic-2.jpg') no-repeat center center fixed";
+            background.style.backgroundSize = "cover";
+            background.style.opacity = "0.3";
         });
 
         // Quiz Questions
@@ -136,6 +141,11 @@
             if (correct) {
                 document.getElementById("page2").classList.add("hidden");
                 document.getElementById("page3").classList.remove("hidden");
+
+                // Background remains same as 'our-pic-2.jpg'
+                background.style.background = "url('our-pic-2.jpg') no-repeat center center fixed";
+                background.style.backgroundSize = "cover";
+                background.style.opacity = "0.3";
             } else {
                 alert("Wrong answers! Try again.");
             }
@@ -152,6 +162,8 @@
         // Final Page: YES Button Actions (Change Background to our-pic.jpg)
         document.getElementById("yesBtn").addEventListener("click", function() {
             alert("Yay! Let's have an amazing prom night! 🎉💖");
+
+            // Change the background to 'our-pic.jpg' at 30% opacity
             background.style.background = "url('our-pic.jpg') no-repeat center center fixed";
             background.style.backgroundSize = "cover";
             background.style.opacity = "0.3";
