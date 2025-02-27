@@ -16,7 +16,7 @@
             overflow: hidden;
         }
 
-        /* Background image stays across all pages */
+        /* Background image (controlled via JS) */
         .background {
             position: fixed;
             top: 0;
@@ -88,7 +88,7 @@
 
     <!-- Page 3: Final Question -->
     <div id="page3" class="container hidden">
-        <h2>Will you be prom tonight?</h2>
+        <h2>Will you be my prom?</h2>
         <button id="yesBtn">Yes</button>
         <button id="noBtn">No</button>
     </div>
@@ -154,6 +154,7 @@
             alert("Yay! Let's have an amazing prom night! 🎉💖");
             background.style.background = "url('our-pic.jpg') no-repeat center center fixed";
             background.style.backgroundSize = "cover";
+            background.style.opacity = "0.3";
         });
 
         // Final Page: NO Button Actions (Increase YES Button Size)
