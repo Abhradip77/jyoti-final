@@ -33,16 +33,30 @@
         .quiz-container {
             text-align: left;
             display: inline-block;
-            background: white;
+            background: rgba(255, 255, 255, 0.8); /* White box with transparency */
             padding: 20px;
             border-radius: 10px;
         }
         #yesBtn {
             transition: font-size 0.2s ease;
         }
+        .background {
+            background: url('our-pic.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+            z-index: -1;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Background Image (Hidden at First) -->
+    <div id="background" class="background hidden"></div>
 
     <!-- Page 1: Promise -->
     <div id="page1" class="container">
@@ -73,6 +87,7 @@
             document.getElementById("page1").classList.add("hidden");
             document.getElementById("page2").classList.remove("hidden");
             document.getElementById("bgMusic").play();
+            document.getElementById("background").classList.remove("hidden"); // Show background
         });
 
         // Quiz Questions
@@ -119,10 +134,8 @@
             });
         });
 
-        // Final Page: YES Button Actions (No Rainbow Effect)
+        // Final Page: YES Button Actions (Background Stays)
         document.getElementById("yesBtn").addEventListener("click", function() {
-            document.body.style.background = "rgba(255, 255, 255, 0.3) url('our-pic.jpg') no-repeat center center fixed";
-            document.body.style.backgroundSize = "cover";
             alert("Yay! Let's have an amazing prom night! 🎉💖");
         });
 
