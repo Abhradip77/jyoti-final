@@ -16,31 +16,30 @@
             overflow: hidden;
         }
 
-        /* Background image */
+        /* Background image that updates */
         .background {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
+            background: url('our-pic-2.jpg') no-repeat center center fixed;
             background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
             opacity: 0.3;
             z-index: -1;
+            transition: background 0.5s ease-in-out;
         }
 
-        /* Main container */
         .container {
             margin-top: 50px;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Hide elements */
         .hidden {
             display: none;
         }
 
-        /* Buttons */
         button {
             background-color: #ff69b4;
             color: white;
@@ -56,33 +55,23 @@
             background-color: #ff1493;
         }
 
-        /* Quiz container */
         .quiz-container {
+            text-align: left;
             display: inline-block;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.8); /* White box with transparency */
             padding: 20px;
             border-radius: 10px;
-            text-align: left;
         }
 
-        /* Enlarging "Yes" button */
         #yesBtn {
             transition: font-size 0.2s ease;
-        }
-
-        /* Countdown Timer */
-        #countdown {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 20px;
-            color: #ff1493;
         }
     </style>
 </head>
 <body>
 
-    <!-- Background Image -->
-    <div class="background" id="bgImage"></div>
+    <!-- Background Image (Always Visible) -->
+    <div class="background" id="background"></div>
 
     <!-- Page 1: Promise -->
     <div id="page1" class="container">
@@ -104,26 +93,21 @@
         <button id="noBtn">No</button>
     </div>
 
-    <!-- Countdown Timer (Hidden Initially) -->
-    <div id="countdown" class="hidden"></div>
-
     <!-- Background Music -->
     <audio id="bgMusic" src="song.mp3" loop></audio>
 
     <script>
-        const bgImage = document.getElementById("bgImage");
+        const background = document.getElementById("background");
 
-        // Set initial background for first and second page
-        function setInitialBackground() {
-            bgImage.style.backgroundImage = "url('our-pic-2.jpg')";
-        }
-        setInitialBackground();
-
-        // Page 1: Move to Quiz & Play Music
         document.getElementById("promiseBtn").addEventListener("click", function() {
             document.getElementById("page1").classList.add("hidden");
             document.getElementById("page2").classList.remove("hidden");
             document.getElementById("bgMusic").play();
+
+            // Ensure the background remains 'our-pic-2.jpg' at 30% opacity
+            background.style.background = "url('our-pic-2.jpg') no-repeat center center fixed";
+            background.style.backgroundSize = "cover";
+            background.style.opacity = "0.3";
         });
 
         // Quiz Questions
@@ -145,7 +129,6 @@
             quizContainer.appendChild(div);
         });
 
-        // Check if all answers are correct
         document.getElementById("nextBtn").addEventListener("click", function() {
             let correct = true;
             questions.forEach((q, index) => {
@@ -158,6 +141,11 @@
             if (correct) {
                 document.getElementById("page2").classList.add("hidden");
                 document.getElementById("page3").classList.remove("hidden");
+
+                // Background remains same as 'our-pic-2.jpg'
+                background.style.background = "url('our-pic-2.jpg') no-repeat center center fixed";
+                background.style.backgroundSize = "cover";
+                background.style.opacity = "0.3";
             } else {
                 alert("Wrong answers! Try again.");
             }
@@ -171,44 +159,21 @@
             });
         });
 
-        // Final Page: YES Button Actions (Change Background & Start Countdown)
+        // Final Page: YES Button Actions (Change Background to our-pic.jpg)
         document.getElementById("yesBtn").addEventListener("click", function() {
             alert("Yay! Let's have an amazing prom night! 🎉💖");
 
-            // Change the background to 'cat-heart.gif' at 30% opacity
-            bgImage.style.backgroundImage = "url('cat-heart.gif')";
-
-            // Show countdown timer
-            document.getElementById("countdown").classList.remove("hidden");
-
-            // Countdown Timer Function
-            function updateCountdown() {
-                const targetDate = new Date("February 28, 2025 14:00:00").getTime();
-                const now = new Date().getTime();
-                const difference = targetDate - now;
-
-                if (difference > 0) {
-                    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-                    document.getElementById("countdown").innerHTML = 
-                        `⏳ Time until our big moment: ${days}d ${hours}h ${minutes}m ${seconds}s 💖`;
-
-                    setTimeout(updateCountdown, 1000);
-                } else {
-                    document.getElementById("countdown").innerHTML = "💖 It's time! Let's go! 🎉";
-                }
-            }
-
-            updateCountdown();
+            // Change the background to 'our-pic.jpg' at 30% opacity
+            background.style.background = "url('our-pic.jpg') no-repeat center center fixed";
+            background.style.backgroundSize = "cover";
+            background.style.opacity = "0.3";
         });
 
-        // NO Button: Increase YES Button Size
+        // Final Page: NO Button Actions (Increase YES Button Size)
         document.getElementById("noBtn").addEventListener("click", function() {
             let yesBtn = document.getElementById("yesBtn");
-            yesBtn.style.fontSize = (parseFloat(window.getComputedStyle(yesBtn).fontSize) + 5) + "px";
+            let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = (currentSize + 5) + "px";
         });
     </script>
 
