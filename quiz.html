@@ -5,18 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Cute Quiz</title>
     <style>
+        /* Background for all pages */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #ffd1dc; /* Baby pink background */
-            transition: background 0.5s ease-in-out;
+            background-color: #ffd1dc; /* Baby pink */
+            margin: 0;
+            padding: 0;
+            position: relative;
         }
-        .hidden {
-            display: none;
+
+        /* Background image stays across all pages */
+        .background {
+            background: url('our-pic.jpg') no-repeat center center fixed;
+            background-size: cover;
+            opacity: 0.3;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
+
         .container {
             margin-top: 50px;
         }
+
+        .hidden {
+            display: none;
+        }
+
         button {
             background-color: #ff69b4;
             color: white;
@@ -27,9 +46,11 @@
             margin: 10px;
             border-radius: 10px;
         }
+
         button:hover {
             background-color: #ff1493;
         }
+
         .quiz-container {
             text-align: left;
             display: inline-block;
@@ -37,26 +58,16 @@
             padding: 20px;
             border-radius: 10px;
         }
+
         #yesBtn {
             transition: font-size 0.2s ease;
-        }
-        .background {
-            background: url('our-pic.jpg') no-repeat center center fixed;
-            background-size: cover;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.3;
-            z-index: -1;
         }
     </style>
 </head>
 <body>
 
-    <!-- Background Image (Hidden at First) -->
-    <div id="background" class="background hidden"></div>
+    <!-- Background Image (Always Visible) -->
+    <div class="background"></div>
 
     <!-- Page 1: Promise -->
     <div id="page1" class="container">
@@ -82,12 +93,10 @@
     <audio id="bgMusic" src="song.mp3" loop></audio>
 
     <script>
-        // Page Navigation
         document.getElementById("promiseBtn").addEventListener("click", function() {
             document.getElementById("page1").classList.add("hidden");
             document.getElementById("page2").classList.remove("hidden");
             document.getElementById("bgMusic").play();
-            document.getElementById("background").classList.remove("hidden"); // Show background
         });
 
         // Quiz Questions
@@ -99,8 +108,9 @@
             { question: "My fav top of yours?", options: ["black kissi one", "pink one", "yellow flower top", "white and pink kurta top"], answer: "white and pink kurta top" }
         ];
 
-        // Display Quiz
         const quizContainer = document.getElementById("quizContainer");
+
+        // Display Questions
         questions.forEach((q, index) => {
             let div = document.createElement("div");
             div.innerHTML = `<p>${q.question}</p>` +
@@ -108,7 +118,6 @@
             quizContainer.appendChild(div);
         });
 
-        // Quiz Validation
         document.getElementById("nextBtn").addEventListener("click", function() {
             let correct = true;
             questions.forEach((q, index) => {
@@ -126,7 +135,7 @@
             }
         });
 
-        // Enable "Next" Button after answering
+        // Enable "Next" Button only when all questions are answered
         document.querySelectorAll('input[type="radio"]').forEach(input => {
             input.addEventListener("change", function() {
                 let allAnswered = questions.every((q, i) => document.querySelector(`input[name="q${i}"]:checked`));
