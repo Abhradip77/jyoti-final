@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Cute Quiz</title>
     <style>
-        /* General Page Styling */
+        /* General Styling */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -28,7 +28,7 @@
             z-index: -1;
         }
 
-        /* Containers */
+        /* Container Styling */
         .container {
             margin-top: 50px;
         }
@@ -37,7 +37,7 @@
             display: none;
         }
 
-        /* Buttons */
+        /* Button Styling */
         button {
             background-color: #ff69b4;
             color: white;
@@ -51,19 +51,6 @@
 
         button:hover {
             background-color: #ff1493;
-        }
-
-        /* Quiz Styling */
-        .quiz-container {
-            text-align: left;
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        #yesBtn {
-            transition: font-size 0.2s ease;
         }
 
         /* Final Page Styling */
@@ -107,8 +94,7 @@
     <!-- Page 2: Quiz -->
     <div id="page2" class="container hidden">
         <h2>Answer these questions correctly!</h2>
-        <div id="quizContainer" class="quiz-container"></div>
-        <button id="nextBtn" class="hidden">Next</button>
+        <button id="nextBtn">Next</button>
     </div>
 
     <!-- Page 3: Final Question -->
@@ -119,75 +105,41 @@
     </div>
 
     <!-- Final Page -->
-    <div id="finalPage" class="container">
+    <div id="finalPage" class="container hidden">
         <h2>Yay! Let's have an amazing prom night! 🎉💖</h2>
-        <p id="countdownTimer"></p>
+        <p id="countdownTimer">Loading timer...</p>
         <p id="loveText">I love you <3</p>
         <img id="catGif" src="cat-heart.gif" alt="Cute Cat GIF">
     </div>
 
-    <!-- Background Music -->
-    <audio id="bgMusic" src="song.mp3" loop></audio>
-
     <script>
+        // Move from Page 1 to Page 2
         document.getElementById("promiseBtn").addEventListener("click", function() {
             document.getElementById("page1").classList.add("hidden");
             document.getElementById("page2").classList.remove("hidden");
-            document.getElementById("bgMusic").play();
         });
 
-        // Quiz Questions
-        const questions = [
-            { question: "When did we go official?", options: ["19 sep", "18 sep", "15 sep", "16 sep"], answer: "19 sep" },
-            { question: "Our fav spot?", options: ["si nonnas", "dailys", "high garden", "pop tates"], answer: "pop tates" },
-            { question: "My birth sign?", options: ["capricon", "sagittarius", "scorpio", "cancer"], answer: "scorpio" },
-            { question: "My favourite team?", options: ["united", "real madrid", "atletico madrid", "atletic club"], answer: "real madrid" },
-            { question: "My fav top of yours?", options: ["black kissi one", "pink one", "yellow flower top", "white and pink kurta top"], answer: "white and pink kurta top" }
-        ];
-
-        const quizContainer = document.getElementById("quizContainer");
-
-        // Display Questions
-        questions.forEach((q, index) => {
-            let div = document.createElement("div");
-            div.innerHTML = `<p>${q.question}</p>` +
-                q.options.map(opt => `<label><input type="radio" name="q${index}" value="${opt}"> ${opt}</label>`).join("<br>");
-            quizContainer.appendChild(div);
-        });
-
+        // Move from Page 2 to Page 3
         document.getElementById("nextBtn").addEventListener("click", function() {
-            let correct = true;
-            questions.forEach((q, index) => {
-                const selected = document.querySelector(`input[name="q${index}"]:checked`);
-                if (!selected || selected.value !== q.answer) {
-                    correct = false;
-                }
-            });
-
-            if (correct) {
-                document.getElementById("page2").classList.add("hidden");
-                document.getElementById("page3").classList.remove("hidden");
-            } else {
-                alert("Wrong answers! Try again.");
-            }
+            document.getElementById("page2").classList.add("hidden");
+            document.getElementById("page3").classList.remove("hidden");
         });
 
-        document.querySelectorAll('input[type="radio"]').forEach(input => {
-            input.addEventListener("change", function() {
-                let allAnswered = questions.every((q, i) => document.querySelector(`input[name="q${i}"]:checked`));
-                document.getElementById("nextBtn").classList.toggle("hidden", !allAnswered);
-            });
-        });
-
-        // Final Page: YES Button Actions
+        // Handle "Yes" Click - Show Final Page
         document.getElementById("yesBtn").addEventListener("click", function() {
             document.getElementById("page3").classList.add("hidden");
+
+            // Change background to GIF
+            document.querySelector(".background").style.background = "url('cat-heart.gif') no-repeat center center fixed";
+            document.querySelector(".background").style.backgroundSize = "cover";
+
             document.getElementById("finalPage").classList.remove("hidden");
-            document.getElementById("catGif").style.display = "block";
+
+            // Start countdown
             startCountdown();
         });
 
-        // NO Button: Increase YES Button Size
+        // "No" Button: Increase YES Button Size
         document.getElementById("noBtn").addEventListener("click", function() {
             let yesBtn = document.getElementById("yesBtn");
             let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
@@ -198,20 +150,33 @@
         function startCountdown() {
             const targetDate = new Date("February 28, 2025 14:00:00").getTime();
             const timer = document.getElementById("countdownTimer");
+            const loveText = document.getElementById("loveText");
 
-            setInterval(() => {
+            function updateTimer() {
                 const now = new Date().getTime();
                 const distance = targetDate - now;
 
                 if (distance <= 0) {
                     timer.innerHTML = "It's time! 💃🕺";
-                } else {
-                    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    timer.innerHTML = `Time left: ${days}d ${hours}h ${minutes}m`;
+                    loveText.style.display = "block";  // Show "I love you <3"
+                    return;
                 }
-            }, 1000);
+
+                let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+                timer.innerHTML = `Time left: ${days}d ${hours}h ${minutes}m`;
+            }
+
+            // Show love text after 2 seconds
+            setTimeout(() => {
+                loveText.style.display = "block";
+            }, 2000);
+
+            // Update timer every second
+            updateTimer();
+            setInterval(updateTimer, 1000);
         }
     </script>
 
