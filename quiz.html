@@ -3,57 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
-    <style>
-        body {
-            background: url('our-pic.jpg') center/cover no-repeat;
-            opacity: 0.9;
-            text-align: center;
-            font-family: 'Arial', sans-serif;
-            color: #ff69b4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background: rgba(255, 192, 203, 0.5);
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 600px;
-        }
-        .question {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-        }
-        button {
-            background: #ff69b4;
-            border: none;
-            padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 10px;
-            color: white;
-            margin-top: 10px;
-        }
-        button:hover {
-            background: #ff1493;
-        }
-    </style>
+    <title>Our Cute Quiz</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <audio id="backgroundMusic" src="song.mp3" loop></audio>
-    <div class="container">
-        <h2>Answer all questions correctly to proceed!</h2>
-        <div id="quiz-container"></div>
-        <button id="submit-btn" onclick="checkAnswers()">Next</button>
+    <div id="page1" class="page">
+        <h1>This will be fun but promise me to stay grounded</h1>
+        <button id="promiseBtn">Promise</button>
     </div>
 
+    <div id="page2" class="page hidden">
+        <h2>Answer these questions correctly!</h2>
+        <div id="quizContainer"></div>
+        <button id="nextBtn" class="hidden">Next</button>
+    </div>
+
+    <div id="page3" class="page hidden">
+        <h2>Will you be prom tonight?</h2>
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+    </div>
+
+    <audio id="bgMusic" src="song.mp3" loop></audio>
     <script>
+        document.getElementById("promiseBtn").addEventListener("click", function() {
+            document.getElementById("page1").classList.add("hidden");
+            document.getElementById("page2").classList.remove("hidden");
+            document.getElementById("bgMusic").play();
+        });
+
         const questions = [
             { question: "When did we go official?", options: ["19 sep", "18 sep", "15 sep", "16 sep"], answer: "19 sep" },
             { question: "Our fav spot?", options: ["si nonnas", "dailys", "high garden", "pop tates"], answer: "pop tates" },
@@ -62,15 +40,15 @@
             { question: "My fav top of yours?", options: ["black kissi one", "pink one", "yellow flower top", "white and pink kurta top"], answer: "white and pink kurta top" }
         ];
 
-        const quizContainer = document.getElementById('quiz-container');
+        const quizContainer = document.getElementById("quizContainer");
         questions.forEach((q, index) => {
-            let div = document.createElement('div');
-            div.innerHTML = `<p class="question">${q.question}</p>` +
-                q.options.map(opt => `<label><input type="radio" name="q${index}" value="${opt}"> ${opt}</label>`).join('<br>');
+            let div = document.createElement("div");
+            div.innerHTML = `<p>${q.question}</p>` +
+                q.options.map(opt => `<label><input type="radio" name="q${index}" value="${opt}"> ${opt}</label>`).join("<br>");
             quizContainer.appendChild(div);
         });
 
-        function checkAnswers() {
+        document.getElementById("nextBtn").addEventListener("click", function() {
             let correct = true;
             questions.forEach((q, index) => {
                 const selected = document.querySelector(`input[name="q${index}"]:checked`);
@@ -80,13 +58,23 @@
             });
 
             if (correct) {
-                window.location.href = "final.html";
+                document.getElementById("page2").classList.add("hidden");
+                document.getElementById("page3").classList.remove("hidden");
             } else {
                 alert("Wrong answers! Try again.");
             }
-        }
+        });
 
-        document.getElementById("backgroundMusic").play();
+        document.getElementById("yesBtn").addEventListener("click", function() {
+            document.body.style.background = "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)";
+            alert("Yay! Let's have an amazing prom night! 🎉💖");
+        });
+
+        document.getElementById("noBtn").addEventListener("click", function() {
+            let yesBtn = document.getElementById("yesBtn");
+            let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = (currentSize + 5) + "px";
+        });
     </script>
 </body>
 </html>
